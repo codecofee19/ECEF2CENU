@@ -10,3 +10,8 @@ and acceleration.
 # Graphs
 ![alt text](graphs.png)
 
+
+# Instructions 
+
+run `git clone git@github.com:codecofee19/ECEF2CENU.git` 
+
