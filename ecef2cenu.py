@@ -16,7 +16,7 @@ vel_list = []
 Accel_list = []
 
 
-
+# calculates velocity between two ENU frames by calculating (enu_frame1 - enuframe2) / (time 1 - time 2)
 def calcvel(enu1, enu2):
 	enu1_matrix, time1 = enu1
 	enu2_matrix, time2 = enu2
@@ -25,6 +25,8 @@ def calcvel(enu1, enu2):
         mat = mat * time
 	return mat 
 
+
+# calculates acceleration between two ENU frames by calculating (velocity ofenu_frame1 - velocity of enuframe2) / (time 1 - time 2)
 def calcaccel(vel1, vel2):
 	vel1_matrix, time1 = vel1 
 	vel2_matrix, time2 = vel2 
@@ -72,8 +74,8 @@ with open('ECEF.txt', 'r') as text:
 				enu = ECEF2ENU(x,y, z)
 				pair = enu,time
 				ENU_list.append(pair)
-
-#for time, enu in enumerate(ENU_list):
+# Now that we have the ENU frames for each coor., we can calculate the velocity 
+# by recording changes in the ENU vector over time
 x = []
 y = []
 z = []
@@ -86,6 +88,8 @@ for a,b in enumerate(ENU_list[1:]):
 	vel_pair = calcvel(b, ENU_list[a-1]), time
 	vel_list.append(vel_pair)	
 	
+# We can use the same technique as above to find the acceleration for 
+# the ENU vectors by recording changes in velocity over time
 x_delta = [] 
 y_delta = []
 z_delta = []
@@ -95,6 +99,7 @@ for a,b in enumerate(vel_list[1:]):
 	y_delta.append(result[:,1])
 	z_delta.append(result[:,2])
 	
+# displays the graph of the ENU points' velocity at various points
 fig = plt.figure()
 ax = fig.add_subplot(211,projection = '3d') 
 ax.set_title("Velocity for ENU frame")
@@ -105,6 +110,8 @@ ax.set_xlabel('E label')
 ax.set_xlabel('N label')
 ax.set_xlabel('U label')
 
+
+# displays the graph of the ENU points' acceleration  at various points
 ax = fig.add_subplot(212,projection = '3d') 
 ax.set_title("Acceleration for ENU frame")
 
