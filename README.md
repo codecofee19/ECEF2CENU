@@ -13,5 +13,7 @@ and acceleration.
 
 # Instructions 
 
+Ensure you have Python 2.7 installed. Download from [here](https://www.python.org/downloads/).
+
 run `git clone git@github.com:codecofee19/ECEF2CENU.git` 
 
