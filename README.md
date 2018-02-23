@@ -20,6 +20,6 @@ Also ensure you have the numpy, mpl_toolkits.mplot3d, and matplotlib.pyplot pack
 
 
 run `git clone git@github.com:codecofee19/ECEF2CENU.git` 
-run  cd ECEF2CENU`
+run  `cd ECEF2CENU`
 run   
 
