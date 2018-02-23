@@ -26,5 +26,15 @@ run `git clone git@github.com:codecofee19/ECEF2CENU.git` or
 
 run  `cd ECEF2CENU`
 
-run  `python ecef2enu.py` or if on Linux, Mac `chmod +x ecef2enu.py` and then `./ecef2enu.py`  
+run  `python ecef2enu.py` 
+
+
+
+# References 
+
+https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#From_ECEF_to_ENU
+
+http://www.navipedia.net/index.php/Transformations_between_ECEF_and_ENU_coordinates
+
+http://www.nosco.ch/mathematics/en/earth-coordinates.php  
 
