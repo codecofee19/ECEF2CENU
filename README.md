@@ -38,3 +38,4 @@ http://www.navipedia.net/index.php/Transformations_between_ECEF_and_ENU_coordina
 
 http://www.nosco.ch/mathematics/en/earth-coordinates.php  
 
+http://galileoandeinstein.physics.virginia.edu/142E/10_1425_web_ppt_pdfs/10_1425_web_Lec_04_2D_Motion.pdf
