@@ -5,7 +5,7 @@ A program to transform coordinates into an ENU frame
 The program reads from the text file the ECEF coordinates, then by applying 
 matrix multiplication, transforms ECEF to an ENU frame relative to the first 
 coordinate in the text file. From then on, the program interpolates velocity 
-and acceleration.  
+and acceleration. First, the program finds the difference between each ENU component between two vectors and divides by the change in time. Then, the program stores the velocity as a vector, and the acceleration is computed as the difference between two velocity vectors divided by change in time. The graphs below and after running the program display the velocity and acceleration vector for each point in the text file.  
 
 # Graphs
 ![alt text](graphs.png)
