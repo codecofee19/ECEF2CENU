@@ -14,6 +14,12 @@ z = 0
 ENU_list = []
 vel_list = []
 Accel_list = []
+x_delta = [] 
+y_delta = []
+z_delta = []
+x_list = []
+y_list = []
+z_list = []
 
 
 # calculates velocity between two ENU frames by calculating (enu_frame1 - enuframe2) / (time 1 - time 2)
@@ -66,6 +72,10 @@ with open('ECEF.txt', 'r') as text:
 				y_0 = float(result[1])
 				z_0 = float(result[2])
 				time_0 = float(result[3]) 
+			
+			# calculate the ENU frame for each point
+			# store the ENU frame and time in a pair
+			# insert pair into list 
 			if(len(result) == 4 and idx >= 2): 
 				x = float(result[0])
 				y = float(result[1])
@@ -74,36 +84,34 @@ with open('ECEF.txt', 'r') as text:
 				enu = ECEF2ENU(x,y, z)
 				pair = enu,time
 				ENU_list.append(pair)
+
+
 # Now that we have the ENU frames for each coor., we can calculate the velocity 
-# by recording changes in the ENU vector over time
-x = []
-y = []
-z = []
-for a,b in enumerate(ENU_list[1:]): 
-	s = calcvel(b, ENU_list[a-1])
-	enu, time = b 
-	x.append(s[:,0])
-	y.append(s[:,1])
-	z.append(s[:,2])
-	vel_pair = calcvel(b, ENU_list[a-1]), time
+# by recording changes in the ENU vector over time and storing the velo. vector
+# with time in a list
+for idx,enu_pair in enumerate(ENU_list[1:]): 
+	velocity = calcvel(enu_pair, ENU_list[idx-1])
+	enu, time = enu_pair 
+	x_list.append(velocity[:,0])
+	y_list.append(velocity[:,1])
+	z_list.append(velocity[:,2])
+	vel_pair = calcvel(enu_pair, ENU_list[idx-1]), time
 	vel_list.append(vel_pair)	
 	
 # We can use the same technique as above to find the acceleration for 
 # the ENU vectors by recording changes in velocity over time
-x_delta = [] 
-y_delta = []
-z_delta = []
-for a,b in enumerate(vel_list[1:]): 
-	result = calcaccel(b, vel_list[a-1])
+for idx, vel_vector in enumerate(vel_list[1:]): 
+	result = calcaccel(vel_vector, vel_list[idx-1])
 	x_delta.append(result[:,0])
 	y_delta.append(result[:,1])
 	z_delta.append(result[:,2])
 	
+
 # displays the graph of the ENU points' velocity at various points
 fig = plt.figure()
 ax = fig.add_subplot(211,projection = '3d') 
 ax.set_title("Velocity for ENU frame")
-ax.scatter(x, y, z, c = 'r', marker = 'o')
+ax.scatter(x_list, y_list, z_list, c = 'r', marker = 'o')
 
 
 ax.set_xlabel('E label')
