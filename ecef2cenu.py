@@ -90,22 +90,42 @@ with open('ECEF.txt', 'r') as text:
 # Now that we have the ENU frames for each coor., we can calculate the velocity 
 # by recording changes in the ENU vector over time and storing the velo. vector
 # with time in a list
-for idx,enu_pair in enumerate(ENU_list[1:]): 
-	velocity = calcvel(enu_pair, ENU_list[idx-1])
-	enu, time = enu_pair 
-	x_list.append(velocity[:,0])
-	y_list.append(velocity[:,1])
-	z_list.append(velocity[:,2])
-	vel_pair = calcvel(enu_pair, ENU_list[idx-1]), time
-	vel_list.append(vel_pair)	
+for idx,enu_pair in enumerate(ENU_list):
+	
+	# store the velocity for the first vector as its ENU frame,
+ 	# since it's the starting point
+	if idx == 0:
+		enu_0, time_0 = enu_pair 
+		x_list.append(enu_0[:,0])
+		y_list.append(enu_0[:,1])
+		z_list.append(enu_0[:,2])
+		vel_pair_0 = enu_0, time_0
+		vel_list.append(vel_pair_0)	
+	else: 
+		velocity = calcvel(enu_pair, ENU_list[idx-1])
+		enu, time = enu_pair 
+		x_list.append(velocity[:,0])
+		y_list.append(velocity[:,1])
+		z_list.append(velocity[:,2])
+		vel_pair = calcvel(enu_pair, ENU_list[idx-1]), time
+		vel_list.append(vel_pair)	
 	
 # We can use the same technique as above to find the acceleration for 
 # the ENU vectors by recording changes in velocity over time
-for idx, vel_vector in enumerate(vel_list[1:]): 
-	result = calcaccel(vel_vector, vel_list[idx-1])
-	x_delta.append(result[:,0])
-	y_delta.append(result[:,1])
-	z_delta.append(result[:,2])
+for idx, vel_vector in enumerate(vel_list): 
+
+	# store the acceleration for the first vector as the velocity  
+ 	# vector since it's the starting point
+	if idx == 0:
+		vel_0, time_0 = vel_pair 
+		x_delta.append(vel_0[:,0])
+		y_delta.append(vel_0[:,1])
+		z_delta.append(vel_0[:,2])
+	else:	
+		result = calcaccel(vel_vector, vel_list[idx-1])
+		x_delta.append(result[:,0])
+		y_delta.append(result[:,1])
+		z_delta.append(result[:,2])
 	
 
 # displays the graph of the ENU points' velocity at various points
