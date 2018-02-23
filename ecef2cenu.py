@@ -44,6 +44,7 @@ def calcaccel(vel1, vel2):
 
 
 # method takes in x, y, z from ECEF and translates to ENU vector
+# Does linear transformation of ECEF to compute ENU vector
 def ECEF2ENU(x, y, z):
 	theta = 0
 	lamda = np.arctan(y_0/x_0) 
