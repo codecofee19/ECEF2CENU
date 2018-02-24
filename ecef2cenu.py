@@ -4,13 +4,11 @@ import math
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from beautifultable import BeautifulTable 
+
 # these are global variables needed throughout file
 x_0 = 0
 y_0 = 0 
 z_0 = 0
-x = 0 
-y = 0 
-z = 0
 ENU_list = []
 vel_list = []
 Accel_list = []
@@ -24,6 +22,7 @@ enu_x = []
 enu_y = []
 enu_z = []
 enu_time = []
+
 # calculates velocity between two ENU frames by calculating (enu_frame1 - enuframe2) / (time 1 - time 2)
 def calcvel(enu1, enu2):
 	enu1_matrix, time1 = enu1
@@ -62,15 +61,7 @@ def ECEF2ENU(x, y, z):
 			[cos_phi * cos_lamda, cos_phi * sin_lamda, sin_phi ]])
 
 	result = first_matrix.dot(second_matrix)
-        check(result, cos_lamda, sin_lamda, cos_phi, sin_phi, phi, lamda)
 	return result
-
-def check(enu, cos_lamda, sin_lamda, cos_phi, sin_phi, phi, lamda):
-        first_matrix = np.matrix([[x_0, y_0, z_0]])
-        second_matrix = np.matrix([ 
-                        [-sin_lamda, -sin_phi*cos_lamda, cos_lamda *cos_phi],
-                        [cos_lamda, -sin_phi * sin_lamda, cos_phi * sin_lamda ],                         [0, cos_phi, sin_phi]])
-        ar = enu.dot(second_matrix) + first_matrix
 
 
 # Read in input from file 
@@ -143,7 +134,17 @@ for idx, vel_vector in enumerate(vel_list):
 		z_delta.append(result[:,2])
 	
 
-# displays the graph of the ENU points' velocity at various points
+# creates a table for the ENU vector components and time for each coordinate
+table = BeautifulTable()
+table.column_headers = ["E", "N", "U", "time"]
+for i, value in enumerate(enu_x):
+
+	table.append_row([enu_x[i], enu_y[i], enu_z[i], enu_time[i]])
+
+print(table)
+
+
+# displays the graph of the x and y component for the ENU vectors 
 fig = plt.figure()
 ax = fig.add_subplot(311) 
 ax.set_title("X and Y values for ENU vector")
@@ -152,16 +153,9 @@ ax.set_xticks(np.arange(math.floor(min(enu_x)), math.ceil(max(enu_x))+1, 0.5))
 ax.set_yticks(np.arange(math.floor(min(enu_y)), math.ceil(max(enu_y))+1, 0.5))
 
 
-"""ax = fig.add_subplot(412,projection = '3d') 
-ax.set_title("X, Y, Z values and time for ENU frame")
-enu_table_labels = ("E, N, U, time") 
-ax[0].axis('tight')
-ax[0].axis('off')
-the_table = ax[0].table(cellText = 
-ax.scatter(enu_x, enu_y, enu_z, c = 'r', marker = 'o')
-"""
 
 
+# displays the graph of the ENU points' velocity at various points
 ax = fig.add_subplot(312, projection = '3d') 
 ax.set_title("Velocity for ENU frame")
 ax.scatter(x_list, y_list, z_list, c = 'r', marker = 'o')
@@ -178,14 +172,6 @@ ax.set_title("Acceleration for ENU frame")
 
 ax.scatter(x_delta, y_delta, z_delta, c = 'r', marker = 'o')
 
-
-table = BeautifulTable()
-table.column_headers = ["E", "N", "U", "time"]
-for i, value in enumerate(enu_x):
-
-	table.append_row([enu_x[i], enu_y[i], enu_z[i], enu_time[i]])
-
-print(table)
 
 plt.tight_layout()
 plt.show()
