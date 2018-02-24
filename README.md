@@ -11,6 +11,8 @@ and acceleration. First, the program finds the difference between each ENU compo
 ![alt text](enu.png)
 ![alt text](Figure_1.png)
 
+# Table
+A table containing the ENU vector values along with time can be found [here](./table.txt) 
 
 # Software Requirements 
 
