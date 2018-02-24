@@ -3,7 +3,7 @@ import numpy as np
 import math
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-
+from beautifultable import BeautifulTable 
 # these are global variables needed throughout file
 x_0 = 0
 y_0 = 0 
@@ -62,7 +62,6 @@ def ECEF2ENU(x, y, z):
 			[cos_phi * cos_lamda, cos_phi * sin_lamda, sin_phi ]])
 
 	result = first_matrix.dot(second_matrix)
-	print(type(result))
         check(result, cos_lamda, sin_lamda, cos_phi, sin_phi, phi, lamda)
 	return result
 
@@ -72,7 +71,6 @@ def check(enu, cos_lamda, sin_lamda, cos_phi, sin_phi, phi, lamda):
                         [-sin_lamda, -sin_phi*cos_lamda, cos_lamda *cos_phi],
                         [cos_lamda, -sin_phi * sin_lamda, cos_phi * sin_lamda ],                         [0, cos_phi, sin_phi]])
         ar = enu.dot(second_matrix) + first_matrix
-        print(ar)
 
 
 # Read in input from file 
@@ -154,11 +152,14 @@ ax.set_xticks(np.arange(math.floor(min(enu_x)), math.ceil(max(enu_x))+1, 0.5))
 ax.set_yticks(np.arange(math.floor(min(enu_y)), math.ceil(max(enu_y))+1, 0.5))
 
 
-#ax = fig.add_subplot(412,projection = '3d') 
-#ax.set_title("X, Y, Z values and time for ENU frame")
-
-#ax.scatter(enu_x, enu_y, enu_z, c = 'r', marker = 'o')
-
+"""ax = fig.add_subplot(412,projection = '3d') 
+ax.set_title("X, Y, Z values and time for ENU frame")
+enu_table_labels = ("E, N, U, time") 
+ax[0].axis('tight')
+ax[0].axis('off')
+the_table = ax[0].table(cellText = 
+ax.scatter(enu_x, enu_y, enu_z, c = 'r', marker = 'o')
+"""
 
 
 ax = fig.add_subplot(312, projection = '3d') 
@@ -176,6 +177,15 @@ ax = fig.add_subplot(313,projection = '3d')
 ax.set_title("Acceleration for ENU frame")
 
 ax.scatter(x_delta, y_delta, z_delta, c = 'r', marker = 'o')
+
+
+table = BeautifulTable()
+table.column_headers = ["E", "N", "U", "time"]
+for i, value in enumerate(enu_x):
+
+	table.append_row([enu_x[i], enu_y[i], enu_z[i], enu_time[i]])
+
+print(table)
 
 plt.tight_layout()
 plt.show()
