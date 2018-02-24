@@ -18,7 +18,7 @@ A table containing the ENU vector values along with time can be found [here](./t
 
 Ensure you have Python 2.7 installed. Download from [here](https://www.python.org/downloads/).
 
-Also ensure you have the numpy, mpl_toolkits.mplot3d, and matplotlib.pyplot packages installed for python. If not installed, follow the instructions [here](https://matplotlib.org/faq/installing_faq.html#clean-install). 
+Also ensure you have the beautifultable, numpy, mpl_toolkits.mplot3d, and matplotlib.pyplot packages installed for python. If not installed, follow the instructions [here](https://matplotlib.org/faq/installing_faq.html#clean-install). 
 
 
 # Instructions
