@@ -20,8 +20,10 @@ z_delta = []
 x_list = []
 y_list = []
 z_list = []
-
-
+enu_x = []
+enu_y = []
+enu_z = []
+enu_time = []
 # calculates velocity between two ENU frames by calculating (enu_frame1 - enuframe2) / (time 1 - time 2)
 def calcvel(enu1, enu2):
 	enu1_matrix, time1 = enu1
@@ -40,7 +42,7 @@ def calcaccel(vel1, vel2):
 	result =  np.subtract(vel1_matrix,vel2_matrix)
 	result = result * time 
 	return result 
-
+     
 
 
 # method takes in x, y, z from ECEF and translates to ENU vector
@@ -60,7 +62,18 @@ def ECEF2ENU(x, y, z):
 			[cos_phi * cos_lamda, cos_phi * sin_lamda, sin_phi ]])
 
 	result = first_matrix.dot(second_matrix)
+	print(type(result))
+        check(result, cos_lamda, sin_lamda, cos_phi, sin_phi, phi, lamda)
 	return result
+
+def check(enu, cos_lamda, sin_lamda, cos_phi, sin_phi, phi, lamda):
+        first_matrix = np.matrix([[x_0, y_0, z_0]])
+        second_matrix = np.matrix([ 
+                        [-sin_lamda, -sin_phi*cos_lamda, cos_lamda *cos_phi],
+                        [cos_lamda, -sin_phi * sin_lamda, cos_phi * sin_lamda ],                         [0, cos_phi, sin_phi]])
+        ar = enu.dot(second_matrix) + first_matrix
+        print(ar)
+
 
 # Read in input from file 
 with open('ECEF.txt', 'r') as text:  
@@ -82,7 +95,11 @@ with open('ECEF.txt', 'r') as text:
 				y = float(result[1])
 				z = float(result[2])
 				time = float(result[3])
+				enu_time.append(time)
 				enu = ECEF2ENU(x,y, z)
+				enu_x.append(float(enu[:,0]))
+				enu_y.append(float(enu[:,1]))
+				enu_z.append(float(enu[:,2]))
 				pair = enu,time
 				ENU_list.append(pair)
 
@@ -130,7 +147,21 @@ for idx, vel_vector in enumerate(vel_list):
 
 # displays the graph of the ENU points' velocity at various points
 fig = plt.figure()
-ax = fig.add_subplot(211,projection = '3d') 
+ax = fig.add_subplot(311) 
+ax.set_title("X and Y values for ENU vector")
+ax.plot(enu_x, enu_y)
+ax.set_xticks(np.arange(math.floor(min(enu_x)), math.ceil(max(enu_x))+1, 0.5))
+ax.set_yticks(np.arange(math.floor(min(enu_y)), math.ceil(max(enu_y))+1, 0.5))
+
+
+#ax = fig.add_subplot(412,projection = '3d') 
+#ax.set_title("X, Y, Z values and time for ENU frame")
+
+#ax.scatter(enu_x, enu_y, enu_z, c = 'r', marker = 'o')
+
+
+
+ax = fig.add_subplot(312, projection = '3d') 
 ax.set_title("Velocity for ENU frame")
 ax.scatter(x_list, y_list, z_list, c = 'r', marker = 'o')
 
@@ -141,10 +172,10 @@ ax.set_xlabel('U label')
 
 
 # displays the graph of the ENU points' acceleration  at various points
-ax = fig.add_subplot(212,projection = '3d') 
+ax = fig.add_subplot(313,projection = '3d') 
 ax.set_title("Acceleration for ENU frame")
 
 ax.scatter(x_delta, y_delta, z_delta, c = 'r', marker = 'o')
 
-
+plt.tight_layout()
 plt.show()
